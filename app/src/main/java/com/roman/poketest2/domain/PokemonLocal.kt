@@ -1,4 +1,17 @@
 package com.roman.poketest2.domain
 
-class PokemonLocal {
-}
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class PokemonLocal(
+    @PrimaryKey val id: Int,
+    val name: String,
+    val height: Int,
+    val weight: Int,
+    val health: Int,
+    val damage: Int,
+    val defence: Int,
+    val type: Int,
+
+)
