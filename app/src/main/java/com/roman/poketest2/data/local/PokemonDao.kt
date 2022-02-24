@@ -7,13 +7,13 @@ import com.roman.poketest2.domain.PokemonLocal
 interface PokemonDao {
 
     @Query("SELECT * FROM pokemonlocal WHERE id = :id")
-    fun getPokemonById(id: Int)
+    fun getPokemonById(id: Int): PokemonLocal
 
     @Query("SELECT * FROM pokemonlocal WHERE name = :name")
-    fun getPokemonById(name: String)
+    fun getPokemonById(name: String): PokemonLocal
 
     @Query("SELECT * FROM pokemonlocal")
-    fun getAllPokemons()
+    fun getAllPokemons(): List<PokemonLocal>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPokemon(pokemon: PokemonLocal)
