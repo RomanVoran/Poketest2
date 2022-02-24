@@ -1,4 +1,4 @@
-package com.roman.poketest2
+package com.roman.poketest2.presentation
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

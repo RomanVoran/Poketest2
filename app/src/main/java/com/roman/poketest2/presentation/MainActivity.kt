@@ -1,4 +1,4 @@
-package com.roman.poketest2
+package com.roman.poketest2.presentation
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.roman.poketest2.R
 import com.roman.poketest2.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
