@@ -5,4 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".presentation.main.MainScreenFragment">
 
+
+    <Button
+        android:id="@+id/load_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Load" />
+
 </FrameLayout>

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.roman.poketest2.R
 import com.roman.poketest2.databinding.FragmentDetailBinding
@@ -32,13 +33,29 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        viewModel.data.observe(viewLifecycleOwner){
-            Log.e("TEST_TAG","name = ${it.name}")
+        viewModel.eventErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            Log.e("TEST_TAG", errorMessage)
+        }
+        viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
+            if (isLoadingShow) {
+                //TODO(ПОКАЗАТЬ процесс загрузки)
+                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                Log.w("TEST_TAG", "LOADING")
+            }else{
+                //TODO(СКРЫТЬ процесс загрузки)
+                Log.w("TEST_TAG", "hide LOADING")
+            }
+        }
+        viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
+            pokeList.forEach { pokemon ->
+                Log.e("TEST_TAG", "[ name = ${pokemon.name}; id = ${pokemon.id} ]")
+            }
         }
 
-        viewModel.fetchPokemon()
-
+        binding.loadButton.setOnClickListener {
+            viewModel.fetchPokemon()
+        }
 
     }
 

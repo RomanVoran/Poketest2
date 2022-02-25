@@ -12,6 +12,6 @@ data class PokemonLocal(
     val health: Int,
     val damage: Int,
     val defence: Int,
-    val type: Int,
-
+    val type: String,
+    val imageUrl: String
 )
