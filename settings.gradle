@@ -3,7 +3,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+
+        // for GlideSvg
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "Poketest2"
