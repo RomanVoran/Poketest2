@@ -18,7 +18,13 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPokemon(pokemon: PokemonLocal)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addPokemons(pokemonList: List<PokemonLocal>)
+
     @Delete
-    suspend fun removeAllPokemons(pokemon: PokemonLocal)
+    suspend fun removePokemon(pokemon: PokemonLocal)
+
+    @Delete
+    suspend fun removePokemons(pokemonList: List<PokemonLocal>)
 
 }

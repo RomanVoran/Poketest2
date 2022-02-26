@@ -42,19 +42,27 @@ class MainScreenFragment : Fragment() {
                 //TODO(ПОКАЗАТЬ процесс загрузки)
                 Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 Log.w("TEST_TAG", "LOADING")
-            }else{
+            } else {
                 //TODO(СКРЫТЬ процесс загрузки)
                 Log.w("TEST_TAG", "hide LOADING")
             }
         }
         viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
             pokeList.forEach { pokemon ->
-                Log.e("TEST_TAG", "[ name = ${pokemon.name}; id = ${pokemon.id} ]")
+                Log.e("TEST_TAG", "[ id = ${pokemon.id}; name = ${pokemon.name} ]")
             }
         }
 
         binding.loadButton.setOnClickListener {
             viewModel.fetchPokemon()
+        }
+
+        binding.testButton.setOnClickListener {
+            viewModel.getLocal()
+        }
+
+        binding.removeButton.setOnClickListener {
+            viewModel.clearAll()
         }
 
     }

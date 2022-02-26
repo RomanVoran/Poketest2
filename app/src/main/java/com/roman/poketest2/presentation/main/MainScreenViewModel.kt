@@ -1,5 +1,7 @@
 package com.roman.poketest2.presentation.main
 
+import android.graphics.DiscretePathEffect
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,6 +53,20 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
             }
         }
 
+    }
+
+    fun getLocal() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getLocalPokeList().forEach { pokemon ->
+                Log.d("TEST_TAG", "id = ${pokemon.id} , name = ${pokemon.name}")
+            }
+        }
+    }
+
+    fun clearAll(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAll()
+        }
     }
 
 
