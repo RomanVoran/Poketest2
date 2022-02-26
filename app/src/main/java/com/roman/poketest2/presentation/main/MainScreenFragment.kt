@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.roman.poketest2.R
-import com.roman.poketest2.databinding.FragmentDetailBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.roman.poketest2.databinding.FragmentMainScreenBinding
+import com.roman.poketest2.presentation.main.adapter.PokemonListAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
@@ -20,6 +20,7 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding: FragmentMainScreenBinding get() = _binding!!
     private val viewModel: MainScreenViewModel by viewModels()
+    private val adapter = PokemonListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,39 +33,48 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        initListeners()
+        initObservers()
+    }
 
+
+    private fun initView() = with(binding) {
+        pokemonList.adapter = adapter
+        pokemonList.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun initListeners() {
+        binding.loadButton.setOnClickListener {
+            viewModel.fetchPokemon()
+        }
+        binding.testButton.setOnClickListener {
+            viewModel.getLocal()
+        }
+        binding.removeButton.setOnClickListener {
+            viewModel.clearAll()
+        }
+    }
+
+
+    private fun initObservers() {
         viewModel.eventErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             Log.e("TEST_TAG", errorMessage)
         }
+
         viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
+            binding.progressCircular.isVisible = isLoadingShow
             if (isLoadingShow) {
-                //TODO(ПОКАЗАТЬ процесс загрузки)
                 Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 Log.w("TEST_TAG", "LOADING")
             } else {
-                //TODO(СКРЫТЬ процесс загрузки)
                 Log.w("TEST_TAG", "hide LOADING")
             }
         }
+
         viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
-            pokeList.forEach { pokemon ->
-                Log.e("TEST_TAG", "[ id = ${pokemon.id}; name = ${pokemon.name} ]")
-            }
+            adapter.submitList(pokeList)
         }
-
-        binding.loadButton.setOnClickListener {
-            viewModel.fetchPokemon()
-        }
-
-        binding.testButton.setOnClickListener {
-            viewModel.getLocal()
-        }
-
-        binding.removeButton.setOnClickListener {
-            viewModel.clearAll()
-        }
-
     }
-
 }

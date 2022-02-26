@@ -1,6 +1,5 @@
 package com.roman.poketest2.presentation.main
 
-import android.graphics.DiscretePathEffect
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-
 
     private val pokemonList = mutableListOf<PokemonUi>()
 
@@ -47,7 +45,7 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
                     is Response.Success -> {
                         _showLoading.postValue(false)
                         pokemonList.addAll(response.data)
-                        _updatePokeList.postValue(pokemonList)
+                        _updatePokeList.postValue(pokemonList.toList())
                     }
                 }
             }
@@ -63,9 +61,11 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
         }
     }
 
-    fun clearAll(){
+    fun clearAll() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAll()
+            pokemonList.clear()
+            _updatePokeList.postValue(pokemonList.toList())
         }
     }
 
