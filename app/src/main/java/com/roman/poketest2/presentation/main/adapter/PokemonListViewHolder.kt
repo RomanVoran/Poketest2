@@ -6,13 +6,13 @@ import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.roman.poketest2.R
 import com.roman.poketest2.databinding.ItemPokemonListBinding
 import com.roman.poketest2.domain.PokemonUi
+import com.roman.poketest2.utils.titlecaseFirstChar
 
 class PokemonListViewHolder(private val binding: ItemPokemonListBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(pokeData: PokemonUi) = with(binding) {
-        binding.pokemonName.text = pokeData.name
-        binding.pokemonId.text = pokeData.id.toString()
+        binding.pokemonName.text = pokeData.name.titlecaseFirstChar()
         GlideToVectorYou
             .init()
             .with(binding.root.context)
