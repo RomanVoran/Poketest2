@@ -77,4 +77,8 @@ class MainScreenFragment : Fragment() {
             adapter.submitList(pokeList)
         }
     }
+
+    private fun onItemClick(i: Int){
+
+    }
 }

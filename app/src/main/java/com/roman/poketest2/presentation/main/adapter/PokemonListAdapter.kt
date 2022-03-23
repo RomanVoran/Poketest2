@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import com.roman.poketest2.databinding.ItemPokemonListBinding
 import com.roman.poketest2.domain.PokemonUi
 
-class PokemonListAdapter : ListAdapter<PokemonUi, PokemonListViewHolder>(PokemonDiffCallback) {
+class PokemonListAdapter(onClick: (id: Int) -> Unit) :
+    ListAdapter<PokemonUi, PokemonListViewHolder>(PokemonDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonListViewHolder {
         val binding =
