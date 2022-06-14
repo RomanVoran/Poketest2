@@ -2,14 +2,14 @@ package com.roman.poketest2.presentation.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.roman.poketest2.R
 import com.roman.poketest2.databinding.FragmentMainScreenBinding
 import com.roman.poketest2.presentation.main.adapter.PokemonListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,9 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding: FragmentMainScreenBinding get() = _binding!!
     private val viewModel: MainScreenViewModel by viewModels()
-    private val adapter = PokemonListAdapter()
+    private val adapter = PokemonListAdapter { pokeId ->
+        findNavController().navigate(R.id.action_mainScreenFragment_to_detailFragment)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,7 @@ class MainScreenFragment : Fragment() {
     private fun initView() = with(binding) {
         pokemonList.adapter = adapter
         pokemonList.layoutManager = LinearLayoutManager(requireContext())
+        setHasOptionsMenu(true)
     }
 
     private fun initListeners() {
@@ -54,6 +57,18 @@ class MainScreenFragment : Fragment() {
         binding.removeButton.setOnClickListener {
             viewModel.clearAll()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_settings) {
+            findNavController().navigate(R.id.action_mainScreenFragment_to_settingsFragment)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -78,7 +93,4 @@ class MainScreenFragment : Fragment() {
         }
     }
 
-    private fun onItemClick(i: Int){
-
-    }
 }

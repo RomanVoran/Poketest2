@@ -8,7 +8,7 @@
         android:id="@+id/mainScreenFragment"
         android:name="com.roman.poketest2.presentation.main.MainScreenFragment"
         android:label="fragment_main_screen"
-        tools:layout="@layout/fragment_main_screen" >
+        tools:layout="@layout/fragment_main_screen">
         <action
             android:id="@+id/action_mainScreenFragment_to_detailFragment"
             app:destination="@id/detailFragment" />

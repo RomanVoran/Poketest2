@@ -1,6 +1,5 @@
 package com.roman.poketest2.data
 
-import android.util.Log
 import com.roman.poketest2.data.local.PokemonDao
 import com.roman.poketest2.data.remote.NetworkService
 import com.roman.poketest2.domain.Response
