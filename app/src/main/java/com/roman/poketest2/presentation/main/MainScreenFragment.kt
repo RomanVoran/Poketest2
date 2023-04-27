@@ -45,6 +45,9 @@ class MainScreenFragment : Fragment() {
         pokemonList.adapter = adapter
         pokemonList.layoutManager = LinearLayoutManager(requireContext())
         setHasOptionsMenu(true)
+        binding.swipeLayout.setOnRefreshListener {
+            viewModel.fetchPokemon()
+        }
     }
 
     private fun initListeners() {
@@ -80,6 +83,7 @@ class MainScreenFragment : Fragment() {
 
         viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
             binding.progressCircular.isVisible = isLoadingShow
+            binding.swipeLayout.isRefreshing = isLoadingShow
             if (isLoadingShow) {
                 Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 Log.w("TEST_TAG", "LOADING")
