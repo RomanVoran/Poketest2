@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.roman.poketest2.databinding.ItemPokemonListBinding
 import com.roman.poketest2.domain.PokemonUi
 
-class PokemonListAdapter(private val onClick: (id: Int) -> Unit) :
+class PokemonListAdapter(private val onItemClick: (pokemonUi: PokemonUi) -> Unit) :
     ListAdapter<PokemonUi, PokemonListViewHolder>(PokemonDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonListViewHolder {
@@ -18,7 +18,7 @@ class PokemonListAdapter(private val onClick: (id: Int) -> Unit) :
 
     override fun onBindViewHolder(holder: PokemonListViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener { onClick(position) }
+        holder.itemView.setOnClickListener { onItemClick(getItem(position)) }
     }
 
 }

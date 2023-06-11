@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,14 +15,19 @@ import com.roman.poketest2.databinding.FragmentMainScreenBinding
 import com.roman.poketest2.presentation.main.adapter.PokemonListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
+const val POKEMON_UI_KEY = "PokemonUi"
+
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
 
     private var _binding: FragmentMainScreenBinding? = null
     private val binding: FragmentMainScreenBinding get() = _binding!!
     private val viewModel: MainScreenViewModel by viewModels()
-    private val adapter = PokemonListAdapter { pokeId ->
-        findNavController().navigate(R.id.action_mainScreenFragment_to_detailFragment)
+    private val adapter = PokemonListAdapter { pokemonUi ->
+        findNavController().navigate(
+            R.id.action_mainScreenFragment_to_detailFragment,
+            bundleOf(Pair(POKEMON_UI_KEY, pokemonUi))
+        )
     }
 
     override fun onCreateView(
@@ -45,20 +51,12 @@ class MainScreenFragment : Fragment() {
         pokemonList.adapter = adapter
         pokemonList.layoutManager = LinearLayoutManager(requireContext())
         setHasOptionsMenu(true)
-        binding.swipeLayout.setOnRefreshListener {
-            viewModel.fetchPokemon()
-        }
+        viewModel.fetchPokemons()
     }
 
     private fun initListeners() {
-        binding.loadButton.setOnClickListener {
-            viewModel.fetchPokemon()
-        }
-        binding.testButton.setOnClickListener {
-            viewModel.getLocal()
-        }
-        binding.removeButton.setOnClickListener {
-            viewModel.clearAll()
+        binding.swipeLayout.setOnRefreshListener {
+            viewModel.fetchPokemons()
         }
     }
 
@@ -84,12 +82,6 @@ class MainScreenFragment : Fragment() {
         viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
             binding.progressCircular.isVisible = isLoadingShow
             binding.swipeLayout.isRefreshing = isLoadingShow
-            if (isLoadingShow) {
-                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-                Log.w("TEST_TAG", "LOADING")
-            } else {
-                Log.w("TEST_TAG", "hide LOADING")
-            }
         }
 
         viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->

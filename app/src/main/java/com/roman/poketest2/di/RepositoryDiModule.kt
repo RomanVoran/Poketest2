@@ -32,7 +32,7 @@ object RepositoryDiModule {
 
     @Singleton
     @Provides
-    fun provideRemoteRepository(@ApplicationContext appContext: Context): PokemonApi =
+    fun provideRemoteRepository(): PokemonApi =
         Retrofit
             .Builder()
             .baseUrl(BuildConfig.BASE_URL)

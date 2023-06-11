@@ -15,7 +15,7 @@ class Repository @Inject constructor(
     private val remoteRepository: NetworkService
 ) {
 
-    private suspend fun fetchPokemon(offset: Int, count: Int) =
+    private suspend fun getRemotePokemonList(offset: Int, count: Int) =
         remoteRepository.fetchPokemonList(offset, count)
 
     suspend fun getLocalPokeList() = localRepository.getAllPokemons().map { it.toUi() }
@@ -23,11 +23,11 @@ class Repository @Inject constructor(
     suspend fun deleteAll() = localRepository.removePokemons(localRepository.getAllPokemons())
 
     suspend fun getPokemons(lastId: Int) = flow {
-        val localData = getLocalPokeList()
-        if (localData.find { it.id > lastId } == null) {
+        val localPokemonList = getLocalPokeList()
+        if (localPokemonList.find { localList -> localList.id > lastId } == null) {
             emit(Response.Loading)
             try {
-                val remoteData = fetchPokemon(lastId + 1, COUNT).map { it.toUi() }
+                val remoteData = getRemotePokemonList(lastId + 1, COUNT).map { it.toUi() }
                 localRepository.addPokemons(remoteData.map { it.toLocal() })
                 emit(Response.Success(remoteData))
             } catch (e: Exception) {
@@ -35,7 +35,7 @@ class Repository @Inject constructor(
                 emit(Response.Error(errorMessage))
             }
         } else {
-            emit(Response.Success(localData))
+            emit(Response.Success(localPokemonList))
         }
     }
 

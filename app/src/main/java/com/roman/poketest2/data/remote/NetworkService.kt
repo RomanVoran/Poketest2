@@ -6,11 +6,11 @@ import javax.inject.Inject
 class NetworkService @Inject constructor(private val pokeApi: PokemonApi) {
 
     suspend fun fetchPokemonList(offset: Int, count: Int): MutableList<PokemonRemote> {
-        val localList = mutableListOf<PokemonRemote>()
+        val remoteList = mutableListOf<PokemonRemote>()
         for (i in (offset until offset + count)) {
-            localList.add(fetchPokemon(i))
+            remoteList.add(fetchPokemon(i))
         }
-        return localList
+        return remoteList
     }
 
     private suspend fun fetchPokemon(id: Int) = pokeApi.fetchPokemon(id)

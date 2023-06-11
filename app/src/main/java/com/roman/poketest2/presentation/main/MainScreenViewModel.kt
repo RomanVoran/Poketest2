@@ -30,7 +30,7 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
     val updatePokeList: LiveData<List<PokemonUi>> get() = _updatePokeList
 
 
-    fun fetchPokemon() {
+    fun fetchPokemons() {
         if (_showLoading.value == true) return
         viewModelScope.launch(Dispatchers.IO) {
             repository.getPokemons(pokemonList.size).collect { response ->

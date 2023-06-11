@@ -5,8 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.roman.poketest2.R
 import com.roman.poketest2.databinding.FragmentDetailBinding
+import com.roman.poketest2.domain.PokemonUi
+import com.roman.poketest2.presentation.main.POKEMON_UI_KEY
 
 class DetailFragment : Fragment() {
 
@@ -20,6 +21,12 @@ class DetailFragment : Fragment() {
     ): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val pokeData = arguments?.getParcelable<PokemonUi>(POKEMON_UI_KEY)
     }
 
 
