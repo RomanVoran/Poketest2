@@ -1,8 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".presentation.settings.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <TextView
+            style="@style/Theme.Poketest2.SettingsTextSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="тема" />
+
+
+        <RadioGroup
+            android:id="@+id/radio_group_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_button_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Тёмная"
+                android:theme="@style/Theme.Poketest2.RadioButton" />
+
+            <RadioButton
+                android:id="@+id/radio_button_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Светлая"
+                android:theme="@style/Theme.Poketest2.RadioButton" />
+
+            <RadioButton
+                android:id="@+id/radio_button_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Default"
+                android:theme="@style/Theme.Poketest2.RadioButton" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/settings_element_margin"
+            android:background="@color/delimiter_color" />
+
+        <TextView
+            style="@style/Theme.Poketest2.SettingsTextSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/settings_element_margin"
+            android:text="формат отображения" />
+
+
+        <RadioGroup
+            android:id="@+id/radio_group_list_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_button_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="списком"
+                android:theme="@style/Theme.Poketest2.RadioButton" />
+
+            <RadioButton
+                android:id="@+id/radio_button_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="плиткой"
+                android:theme="@style/Theme.Poketest2.RadioButton" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/settings_element_margin"
+            android:background="@color/delimiter_color" />
+
+        <Button
+            android:id="@+id/button_clear_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/settings_element_margin"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="очистить Список" />
+
+    </LinearLayout>
 
 </FrameLayout>

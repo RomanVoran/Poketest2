@@ -7,12 +7,24 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey">#424242</color>
     <color name="transparent">#00000000</color>
 
-    <color name="colorPrimary">#FF0000</color>
+    <color name="colorPrimary">#BB0000</color>
     <color name="colorPrimaryDark">#660000</color>
     <color name="colorAccent">#D32A2A</color>
     <color name="colorButton">#960000</color>
 
 
-    </resources>
+
+    <color name="text_color_sub">#424242</color>
+    <color name="text_color_main">#000000</color>
+    <color name="background_default">#FFFFFF</color>
+    <color name="background_sub">#C1C1C1</color>
+
+
+
+
+    <color name="delimiter_color">#7C7C7C</color>
+
+</resources>

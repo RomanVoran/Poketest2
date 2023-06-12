@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grey">#424242</color>
+
+
+    <color name="text_color_sub">#424242</color>
+    <color name="text_color_main">#FFFFFF</color>
+    <color name="background_default">#222222</color>
+    <color name="background_sub">#252525</color>
+
+    <color name="delimiter_color">#7C7C7C</color>
+
+</resources>

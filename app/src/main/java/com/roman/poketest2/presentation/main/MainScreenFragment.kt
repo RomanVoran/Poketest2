@@ -9,13 +9,20 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.roman.poketest2.R
 import com.roman.poketest2.databinding.FragmentMainScreenBinding
+import com.roman.poketest2.domain.ListFormat
 import com.roman.poketest2.presentation.main.adapter.PokemonListAdapter
+import com.roman.poketest2.presentation.settings.SettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-const val POKEMON_UI_KEY = "PokemonUi"
+const val POKEMON_UI_KEY = "pokemon_ui_key"
+const val CLEAR_LIST_REQUEST_KEY = "clear_list_key"
+const val CHANGE_LIST_FORMAT_REQUEST_KEY = "change_list_format_key"
+
+val ss = "DSaf"
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
@@ -49,7 +56,7 @@ class MainScreenFragment : Fragment() {
 
     private fun initView() = with(binding) {
         pokemonList.adapter = adapter
-        pokemonList.layoutManager = LinearLayoutManager(requireContext())
+        pokemonList.layoutManager = GridLayoutManager(requireContext(), 3)
         setHasOptionsMenu(true)
         viewModel.fetchPokemons()
     }
@@ -66,10 +73,32 @@ class MainScreenFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_settings) {
-            findNavController().navigate(R.id.action_mainScreenFragment_to_settingsFragment)
-        }
+        if (item.itemId == R.id.action_settings) showSettingsDialog()
         return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun showSettingsDialog() {
+        SettingsFragment().show(childFragmentManager, "SETTINGS")
+        childFragmentManager.setFragmentResultListener(CLEAR_LIST_REQUEST_KEY, this)
+        { key, bundle ->
+            viewModel.clearAll()
+        }
+        childFragmentManager.setFragmentResultListener(CHANGE_LIST_FORMAT_REQUEST_KEY, this)
+        { key, bundle ->
+            val format = bundle.getString(CHANGE_LIST_FORMAT_REQUEST_KEY).let { listFormatName ->
+                ListFormat.fromString(listFormatName)
+            }
+            when (format) {
+                ListFormat.LIST -> {
+                    binding.pokemonList.layoutManager = LinearLayoutManager(requireContext())
+                }
+
+                ListFormat.GRID -> {
+                    binding.pokemonList.layoutManager = GridLayoutManager(requireContext(), 3)
+                }
+            }
+        }
     }
 
 
