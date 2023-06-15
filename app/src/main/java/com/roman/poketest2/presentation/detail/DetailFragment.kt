@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.roman.poketest2.databinding.FragmentDetailBinding
 import com.roman.poketest2.domain.PokemonUi
-import com.roman.poketest2.presentation.main.POKEMON_UI_KEY
+import com.roman.poketest2.utils.POKEMON_UI_TRANSACTION_KEY
 
 class DetailFragment : Fragment() {
 
@@ -26,7 +26,7 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pokeData = arguments?.getParcelable<PokemonUi>(POKEMON_UI_KEY)
+        val pokeData = arguments?.getParcelable<PokemonUi>(POKEMON_UI_TRANSACTION_KEY)
     }
 
 

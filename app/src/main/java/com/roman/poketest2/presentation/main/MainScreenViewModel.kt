@@ -39,9 +39,11 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
                         _showLoading.postValue(false)
                         _eventErrorMessage.postValue(response.errorMessage)
                     }
+
                     Response.Loading -> {
                         _showLoading.postValue(true)
                     }
+
                     is Response.Success -> {
                         _showLoading.postValue(false)
                         pokemonList.addAll(response.data)
