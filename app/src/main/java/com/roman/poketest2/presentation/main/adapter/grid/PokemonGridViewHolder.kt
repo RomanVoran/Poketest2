@@ -1,14 +1,14 @@
-package com.roman.poketest2.presentation.main.adapter
+package com.roman.poketest2.presentation.main.adapter.grid
 
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.roman.poketest2.R
-import com.roman.poketest2.databinding.ItemPokemonListBinding
+import com.roman.poketest2.databinding.ItemPokemonGridBinding
 import com.roman.poketest2.domain.PokemonUi
 import com.roman.poketest2.utils.titlecaseFirstChar
 
-class PokemonListViewHolder(private val binding: ItemPokemonListBinding) :
+class PokemonGridViewHolder(private val binding: ItemPokemonGridBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(pokeData: PokemonUi) = with(binding) {

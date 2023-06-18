@@ -1,22 +1,34 @@
 package com.roman.poketest2.presentation.main
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.roman.poketest2.R
 import com.roman.poketest2.data.Repository
+import com.roman.poketest2.domain.ListFormat
 import com.roman.poketest2.domain.PokemonUi
 import com.roman.poketest2.domain.Response
+import com.roman.poketest2.utils.LIST_FORMAT_SHARED_KEY
+import com.roman.poketest2.utils.SHARED_PREFERENCES_NAME
 import com.roman.poketest2.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class MainScreenViewModel @Inject constructor(
+    private val repository: Repository,
+    @ApplicationContext context: Context
+) : ViewModel() {
+
+    private val sharedPreferences =
+        context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     private val pokemonList = mutableListOf<PokemonUi>()
 
@@ -70,6 +82,13 @@ class MainScreenViewModel @Inject constructor(private val repository: Repository
             _updatePokeList.postValue(pokemonList.toList())
         }
     }
+
+    fun getListFormat(): ListFormat {
+        val listFormatName = sharedPreferences.getString(LIST_FORMAT_SHARED_KEY, "") ?: ""
+        return ListFormat.fromString(listFormatName)
+    }
+
+    fun getPokemonList() = pokemonList
 
 
 }

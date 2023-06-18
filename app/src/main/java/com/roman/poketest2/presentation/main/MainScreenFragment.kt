@@ -11,11 +11,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.roman.poketest2.R
 import com.roman.poketest2.databinding.FragmentMainScreenBinding
 import com.roman.poketest2.domain.ListFormat
 import com.roman.poketest2.domain.PokemonUi
-import com.roman.poketest2.presentation.main.adapter.PokemonListAdapter
+import com.roman.poketest2.presentation.main.adapter.grid.PokemonGridAdapter
+import com.roman.poketest2.presentation.main.adapter.list.PokemonListAdapter
 import com.roman.poketest2.presentation.settings.SettingsFragment
 import com.roman.poketest2.utils.CHANGE_LIST_FORMAT_RESULT_REQUEST_KEY
 import com.roman.poketest2.utils.CLEAR_LIST_RESULT_REQUEST_KEY
@@ -29,7 +32,13 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding: FragmentMainScreenBinding get() = _binding!!
     private val viewModel: MainScreenViewModel by viewModels()
-    private val adapter = PokemonListAdapter { pokemonUi -> openDetailsFragment(pokemonUi) }
+    private val adapterList by lazy {
+        PokemonListAdapter { pokemonUi -> openDetailsFragment(pokemonUi) }
+    }
+    private val adapterGrid by lazy {
+        PokemonGridAdapter { pokemonUi -> openDetailsFragment(pokemonUi) }
+    }
+    private lateinit var currentAdapter: ListAdapter<PokemonUi, out RecyclerView.ViewHolder>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +58,14 @@ class MainScreenFragment : Fragment() {
 
 
     private fun initView() = with(binding) {
-        pokemonList.adapter = adapter
-        pokemonList.layoutManager = LinearLayoutManager(requireContext())
+        changeCurrentAdapter(viewModel.getListFormat())
+        pokemonList.layoutManager = getLayoutManager(viewModel.getListFormat())
+        pokemonList.adapter = currentAdapter
+        currentAdapter.submitList(viewModel.getPokemonList())
         setHasOptionsMenu(true)
         viewModel.fetchPokemons()
     }
+
 
     private fun initListeners() = with(binding) {
         swipeLayout.setOnRefreshListener {
@@ -61,10 +73,12 @@ class MainScreenFragment : Fragment() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings) showSettingsDialog()
@@ -80,20 +94,17 @@ class MainScreenFragment : Fragment() {
         }
         childFragmentManager.setFragmentResultListener(CHANGE_LIST_FORMAT_RESULT_REQUEST_KEY, this)
         { key, bundle ->
-            val format =
-                bundle.getString(CHANGE_LIST_FORMAT_RESULT_REQUEST_KEY).let { listFormatName ->
-                    ListFormat.fromString(listFormatName)
-                }
-            when (format) {
-                ListFormat.LIST -> {
-                    binding.pokemonList.layoutManager = LinearLayoutManager(requireContext())
-                }
+            val formatName = bundle.getString(CHANGE_LIST_FORMAT_RESULT_REQUEST_KEY)
 
-                ListFormat.GRID -> {
-                    binding.pokemonList.layoutManager = GridLayoutManager(requireContext(), 3)
-                }
-            }
+            val scrollPosition =
+                (binding.pokemonList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            changeCurrentAdapter(ListFormat.fromString(formatName))
+            binding.pokemonList.layoutManager = getLayoutManager(ListFormat.fromString(formatName))
+            binding.pokemonList.adapter = currentAdapter
+            currentAdapter.submitList(viewModel.getPokemonList())
+            binding.pokemonList.scrollToPosition(scrollPosition)
         }
+
     }
 
 
@@ -109,9 +120,10 @@ class MainScreenFragment : Fragment() {
         }
 
         viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
-            adapter.submitList(pokeList)
+            currentAdapter.submitList(pokeList)
         }
     }
+
 
     private fun openDetailsFragment(pokemonUi: PokemonUi) {
         findNavController().navigate(
@@ -119,5 +131,19 @@ class MainScreenFragment : Fragment() {
             bundleOf(Pair(POKEMON_UI_TRANSACTION_KEY, pokemonUi))
         )
     }
+
+
+    private fun changeCurrentAdapter(listFormat: ListFormat) {
+        currentAdapter = when (listFormat) {
+            ListFormat.LIST -> adapterList
+            ListFormat.GRID -> adapterGrid
+        }
+    }
+
+    private fun getLayoutManager(listFormat: ListFormat) = when (listFormat) {
+        ListFormat.LIST -> LinearLayoutManager(requireContext())
+        ListFormat.GRID -> GridLayoutManager(requireActivity(), 3)
+    }
+
 
 }
