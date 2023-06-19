@@ -42,8 +42,12 @@ class MainScreenViewModel @Inject constructor(
     val updatePokeList: LiveData<List<PokemonUi>> get() = _updatePokeList
 
 
-    fun fetchPokemons() {
+    fun fetchPokemons(onStart: Boolean = false) {
         if (_showLoading.value == true) return
+        if (onStart && pokemonList.size > 0) {
+            _updatePokeList.postValue(pokemonList.toList())
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             repository.getPokemons(pokemonList.size).collect { response ->
                 when (response) {

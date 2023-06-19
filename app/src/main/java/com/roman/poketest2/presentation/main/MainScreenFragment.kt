@@ -63,13 +63,29 @@ class MainScreenFragment : Fragment() {
         pokemonList.adapter = currentAdapter
         currentAdapter.submitList(viewModel.getPokemonList())
         setHasOptionsMenu(true)
-        viewModel.fetchPokemons()
+        viewModel.fetchPokemons(true)
     }
 
 
     private fun initListeners() = with(binding) {
         swipeLayout.setOnRefreshListener {
             viewModel.fetchPokemons()
+        }
+    }
+
+
+    private fun initObservers() {
+        viewModel.eventErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            Log.e("TEST_TAG", errorMessage)
+        }
+
+        viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
+            binding.swipeLayout.isRefreshing = isLoadingShow
+        }
+
+        viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
+            currentAdapter.submitList(pokeList)
         }
     }
 
@@ -105,23 +121,6 @@ class MainScreenFragment : Fragment() {
             binding.pokemonList.scrollToPosition(scrollPosition)
         }
 
-    }
-
-
-    private fun initObservers() {
-        viewModel.eventErrorMessage.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-            Log.e("TEST_TAG", errorMessage)
-        }
-
-        viewModel.showLoading.observe(viewLifecycleOwner) { isLoadingShow ->
-            binding.progressCircular.isVisible = isLoadingShow
-            binding.swipeLayout.isRefreshing = isLoadingShow
-        }
-
-        viewModel.updatePokeList.observe(viewLifecycleOwner) { pokeList ->
-            currentAdapter.submitList(pokeList)
-        }
     }
 
 
